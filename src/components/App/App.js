@@ -6,6 +6,15 @@ import Tracklist from '../TrackList/Tracklist';
   
 
 function App() {
+  const [user, setUser] = useState(
+    {
+      user: 'Raigen',
+      userId: '1',
+      playListName: '',
+      playList: []
+    }
+  );
+
   const [playListName, setPlayListName] = useState('');
   const [playList, setPlayList] = useState([]);
   const [searchResults, setSearchResults] = useState([
@@ -13,12 +22,14 @@ function App() {
       track: "Crazy Frog",
       artist: "Artist1",
       album: "Album1",
-      id: "0001"
+      id: "0001",
+      uri: "0201"
     }, {
       track: "Peanut Butter Jelly Time",
       artist: "Banana",
       album: "Album2",
-      id: "3542"
+      id: "3542",
+      uri: "0041"
     }
   ]); 
 
@@ -43,6 +54,19 @@ function App() {
     setPlayListName(e.target.newName.value);
   }
 
+  const saveListToUser = (e) => {
+    e.preventDefault();
+    
+    setUser((prevUser) => ({
+      ...prevUser,
+      "playListName": playListName, 
+      "playList": playList.map(track=> track.uri) 
+  }));
+  }
+
+  useEffect(() => {
+    console.log(user);
+  }, [user])
   return (
     <div className="App">
       <div>
@@ -58,8 +82,8 @@ function App() {
             <input type="text" name="newName" placeholder={playListName}/>
             <button type='submit'>confirm</button>
           </form>
-          
         </span>
+        <button onClick={saveListToUser}> Save </button>
         
         <Tracklist trackList={playList} addButton={false} func={removeFromPlayList}/>
     </div>
