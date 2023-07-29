@@ -2,19 +2,11 @@ import React, {useState} from "react";
 import SearchResult from "../SearchResults/SearchResults";
 import Tracklist from "../TrackList/Tracklist";
 
-export default function SearchBar( props ) {
-    const [search, setSearch] = useState(props.search);
-
-    const handleChange = (e) => {
-        e.preventDefault();
-
-        setSearch(e.target.value);
-    }
+export default function SearchBar( {func, search} ) {
 
     return (
         <div>
-            <input type="text" placeholder="Search" onChange={handleChange} value={search}/>
-            <p>{search}</p>
+            <input type="text" placeholder="Search" onChange={func} value={search}/>
         </div>
     );
 }

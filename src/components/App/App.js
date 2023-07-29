@@ -3,7 +3,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Tracklist from '../TrackList/Tracklist';
-  
+import Spotify from '../util/Spotify';
 
 function App() {
   const [user, setUser] = useState(
@@ -14,25 +14,25 @@ function App() {
       playList: []
     }
   );
+  const testTracks = [{
+    track: "Crazy Frog",
+    artist: "Artist1",
+    album: "Album1",
+    id: "0001",
+    uri: "0201"
+  }, {
+    track: "Peanut Butter Jelly Time",
+    artist: "Banana",
+    album: "Album2",
+    id: "3542",
+    uri: "0041"
+  }];
 
   const [playListName, setPlayListName] = useState('');
   const [playList, setPlayList] = useState([]);
-  const [searchResults, setSearchResults] = useState([
-    {
-      track: "Crazy Frog",
-      artist: "Artist1",
-      album: "Album1",
-      id: "0001",
-      uri: "0201"
-    }, {
-      track: "Peanut Butter Jelly Time",
-      artist: "Banana",
-      album: "Album2",
-      id: "3542",
-      uri: "0041"
-    }
-  ]); 
-
+  const [searchResults, setSearchResults] = useState([]);
+  const [search, setSearch] = useState('');
+   
   const addToPlayList = (e) => {
     const trackId = e.target.value;
     const trackToAdd = searchResults.find(track => track.id === trackId);
@@ -64,13 +64,21 @@ function App() {
   }));
   }
 
+  const searchTrack = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);    
+}
+
   useEffect(() => {
-    console.log(user);
-  }, [user])
+    if(search !== ''){
+      Spotify.search(search).then(setSearchResults);
+    }
+  }, [search])
+
   return (
     <div className="App">
       <div>
-        <SearchBar />
+        <SearchBar func={searchTrack} search={search}/>
         <div className='results'>
           <SearchResults searchResults={searchResults} func={addToPlayList} addButton={true}/>
         </div>
