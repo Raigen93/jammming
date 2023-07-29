@@ -1,13 +1,24 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Track from "../Track/Track";
 
-export default function Tracklist( { tracks } ) {
-    const [trackList, setTrackList] = useState({tracks});
-    
-    trackList.forEach(element => {
+const Tracklist = ( props ) => {
         return (
-            <Track track={element} />
-    )
-    });
+            <>
+                {props.trackList?.map((track) => {
+                    return (
+                        <Track 
+                        track={track}
+                        key={track.id}
+                        artist={track.artist}
+                        album={track.album}
+                        func={props.func}
+                        addButton={props.addButton}
+                        />
+                    )
+                })}
+            </>
+        )
     
 }
+
+export default Tracklist;
