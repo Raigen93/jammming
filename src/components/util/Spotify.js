@@ -1,5 +1,4 @@
 
-const clientSecret = 'dfe7554a6eed4247acd5cd9f66fd4d77';
 let accessToken;
 
 const Spotify = {
