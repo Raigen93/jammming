@@ -28,7 +28,7 @@ function App() {
     uri: "0041"
   }];
 
-  const [playListName, setPlayListName] = useState('');
+  const [playListName, setPlayListName] = useState('My playlist');
   const [playList, setPlayList] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState('');
@@ -70,30 +70,59 @@ function App() {
 }
 
   useEffect(() => {
+    if(playList.length > 0) {
+      document.getElementById('saveButton').style.display="flex";
+    } else {
+      document.getElementById('saveButton').style.display="none";
+    }
+  }, [playList])
+
+  useEffect(() => {
     if(search !== ''){
       Spotify.search(search).then(setSearchResults);
+    } else {
+      setSearchResults([]);
     }
   }, [search])
 
   return (
     <div className="App">
-      <div>
-        <SearchBar func={searchTrack} search={search}/>
-        <div className='results'>
-          <SearchResults searchResults={searchResults} func={addToPlayList} addButton={true}/>
+      
+      <SearchBar func={searchTrack} search={search}/>
+      
+      <div className="main">
+        <section>
+          <div className="pageSection">
+            <div className='results'>
+            <SearchResults searchResults={searchResults} func={addToPlayList} addButton={true} className="searchResults"/>
+            </div>
+          </div>
+          
+        </section>
+
+        <section >
+          <div className="pageSection">
+            <span className='container'>
+            <h2>{playListName}</h2>
+            <button id="dropButton"className='dropdown'> ◀ </button>
+          </span>
+          
+            <span style={{display: 'none'}}>
+              <form onSubmit={handleNameChange}>
+                <input type="text" name="newName" placeholder={playListName}/>
+                <button type='submit'>rename</button>
+              </form>
+            
+            </span>
+        <div>
+          <Tracklist className="playList" trackList={playList} addButton={false} func={removeFromPlayList}/>
+            <button id="saveButton" style={{display: 'none', height: "25px", margin: 'auto'}} onClick={saveListToUser}> Save Playlist </button>
         </div>
         
-      </div>
-        <h2>{playListName}</h2>
-        <span>
-          <form onSubmit={handleNameChange}>
-            <input type="text" name="newName" placeholder={playListName}/>
-            <button type='submit'>confirm</button>
-          </form>
-        </span>
-        <button onClick={saveListToUser}> Save </button>
-        
-        <Tracklist trackList={playList} addButton={false} func={removeFromPlayList}/>
+          </div>
+          
+        </section>
+        </div>
     </div>
   );
 }
